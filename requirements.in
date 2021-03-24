@@ -1,0 +1,8 @@
+Click
+Flask
+flasgger
+Flask-Cors
+gunicorn
+mysqlclient
+requests
+SQLAlchemy
