@@ -1,0 +1,191 @@
+info:
+  title: "Metadata Update"
+  version: "1.0"
+
+produces: [
+  "application/json",
+]
+
+paths:
+  /jobs/:
+    post:
+      tags:
+      - Update the Ensembl Metadata database
+      summary: "Create a job to update the metadata database"
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/components/schemas/submit'
+      responses:
+        201:
+          description: ID of submitted job.
+          schema:
+            $ref: "#/components/schemas/job"
+    get:
+      tags:
+        - Update the Ensembl Metadata database
+      summary: "Retrieve information for all metadata updates"
+      responses:
+        200:
+          description: Details of 'Update Metadata' jobs.
+          schema:
+            $ref: "#/components/schemas/results"
+
+  /jobs/{job_id}:
+    get:
+      tags:
+        - Update the Ensembl Metadata database
+      summary: "Retrieve information for a specific metadata update"
+      parameters:
+        - $ref: "#/components/parameters/job_id"
+        - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/email"
+      responses:
+        200:
+          description: Details of the specified 'Update Metadata' job.
+          schema:
+            $ref: "#/components/schemas/result"
+    delete:
+      tags:
+        - Update the Ensembl Metadata database
+      summary: "Delete a specific metadata update"
+      parameters:
+        - $ref: "#/components/parameters/job_id"
+      responses:
+        200:
+          description: ID of specified 'Update Ensembl' job.
+          schema:
+            $ref: "#/components/schemas/job"
+
+components:
+  parameters:
+    job_id:
+      name: job_id
+      in: path
+      description: ID for a job in the pipeline database
+      required: true
+      schema:
+        type: integer
+        example: 1
+
+    format:
+      name: format
+      in: query
+      description: Retrieve either an email summary, or a failure report
+      required: false
+      schema:
+        type: string
+        example: '"email" or "failures"'
+
+    email:
+      name: email
+      in: query
+      description: Email address to use for summary
+      required: false
+      schema:
+        type: string
+        example: 'bananas@ebi.ac.uk'
+
+  schemas:
+    job:
+      title: job
+      type: object
+      properties:
+        job_id:
+          type: integer
+          description: ID for a job in the pipeline database
+          example: 1
+
+    jobs:
+      title: jobs
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            $ref: "#/components/schemas/job"
+
+    submit:
+      title: metadata submission
+      description: Update the metadata database with information from another database.
+      type: object
+      required:
+        -metadata_uri
+        -database_uri
+        -update_type
+        -comment
+        -email
+        -source
+      properties:
+        metadata_uri:
+          type: string
+          example: 'mysql://user:password@server:port/metadata_db'
+        database_uri:
+          type: string
+          example: 'mysql://user:password@server:port/db'
+        e_release:
+          type: integer
+          example: 104
+        eg_release:
+          type: integer
+          example: 51
+        release_date:
+          type: string
+          example: '2021-04-15'
+        current_release:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: 'bananas@ebi.ac.uk'
+        update_type:
+          type: string
+          example: 'new_assembly'
+        comment:
+          type: string
+          example: 'handover of new species'
+        source:
+          type: string
+          example: 'pre-handover load'
+
+    result:
+      title: metadata update result
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID for a job in the pipeline database
+        input:
+          type: object
+          properties:
+            metadata_uri:
+              type: string
+              example: 'mysql://user:password@server:port/metadata_db'
+            database_uri:
+              type: string
+              example: 'mysql://user:password@server:port/db'
+            timestamp:
+              type: number
+              example: 1515494114.263158
+        output:
+          type: object
+          properties:
+            metadata_uri:
+              type: string
+              example: 'mysql://user:password@server:port/metadata_db'
+            database_uri:
+              type: string
+              example: 'mysql://user:password@server:port/db'
+            runtime:
+              type: string
+              example: 31 seconds
+        status:
+          type: string
+          description: Status of update ('complete', 'incomplete', or 'failed')
+
+    results:
+      title: results
+      type: array
+      items:
+        $ref: "#/components/schemas/result"
