@@ -7,7 +7,7 @@ produces: [
 ]
 
 paths:
-  /jobs/:
+  /jobs:
     post:
       tags:
       - Update the Ensembl Metadata database

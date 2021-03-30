@@ -42,7 +42,7 @@ def info():
     return redirect('api')
 
 
-@app.route('/jobs/', methods=['POST'])
+@app.route('/jobs', methods=['POST'])
 def submit_job():
     if request.is_json:
         request.json["metadata_uri"] = app.config["METADATA_URI"]
@@ -60,11 +60,11 @@ def submit_job():
         raise HTTPRequestError(error_msg)
 
 
-@app.route('/jobs/', methods=['GET'])
+@app.route('/jobs', methods=['GET'])
 def jobs():
     app.logger.info('Retrieving jobs')
     analysis = app.config['HIVE_ANALYSIS']
-    return jsonify(get_hive().get_all_results(analysis, child=True))
+    return jsonify(get_hive().get_all_results(analysis, child=False))
 
 
 @app.route('/jobs/<int:job_id>', methods=['GET'])
