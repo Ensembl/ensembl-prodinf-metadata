@@ -1,3 +1,4 @@
+git+git://github.com/Ensembl/ensembl-prodinf-core.git#egg=ensembl-prodinf-core
 Click
 Flask
 flasgger
