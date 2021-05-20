@@ -7,3 +7,4 @@ gunicorn
 mysqlclient
 requests
 SQLAlchemy
+python-dotenv==0.17.1
