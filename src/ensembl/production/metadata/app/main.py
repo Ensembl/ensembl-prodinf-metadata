@@ -39,7 +39,7 @@ def get_hive():
 
 @app.route('/', methods=['GET'])
 def info():
-    return redirect('api')
+    return jsonify(app.config['SWAGGER'])
 
 
 @app.route('/jobs', methods=['POST'])
