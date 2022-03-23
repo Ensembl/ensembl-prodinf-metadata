@@ -20,7 +20,7 @@ click==8.0.4
     #   flask
 deprecation==2.1.0
     # via ensembl-prodinf-core
-ensembl-prodinf-core @ git+https://github.com/Ensembl/ensembl-prodinf-core.git
+ensembl-prodinf-core==2.0.3
     # via -r requirements.in
 flasgger==0.9.5
     # via -r requirements.in
