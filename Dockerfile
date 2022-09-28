@@ -1,25 +1,20 @@
-FROM python:3.8.9-slim
+FROM python:3.9
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+RUN useradd --create-home appuser
+WORKDIR /home/appuser/
+USER appuser
+RUN mkdir -p /home/appuser/metadata
+RUN chown appuser:appuser /home/appuser/metadata
+WORKDIR /home/appuser/metadata
 
-# Need git, because requirements.txt includes a repository
-# gcc and mysql library are required for the mysqlclient package
-RUN apt-get -y update && \
-    apt-get -y install gcc && \
-    apt-get -y install git && \
-    apt-get -y install default-libmysqlclient-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#copy metadata app
+COPY --chown=appuser:appuser . /home/appuser/metadata
 
-WORKDIR /usr/src/app
+#Install dependenciesls
+RUN python -m venv /home/appuser/metadata/venv
+ENV PATH="/home/appuser/metadata/venv/bin:$PATH"
+RUN pip install -r requirements.txt
+RUN pip install .
 
-COPY . /usr/src/app/
-
-RUN python -m venv /usr/src/app/venv
-ENV PATH="/usr/src/app/venv/bin:$PATH"
-
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir .
-
-CMD  ["gunicorn", "--config", "/usr/src/app/gunicorn_config.py", "-b", "0.0.0.0:5000", "ensembl.production.metadata.app.main:app"]
+EXPOSE 5002
+CMD  ["gunicorn", "--config", "/home/appuser/metadata/gunicorn_config.py", "-b", "0.0.0.0:5002", "ensembl.production.metadata.app.main:app"]
