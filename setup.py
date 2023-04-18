@@ -9,7 +9,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
+import os
 from pathlib import Path
 
 from setuptools import setup, find_namespace_packages, find_packages
@@ -28,7 +28,7 @@ def import_requirements():
 
 setup(
     name='metadata_update',
-    version=version,
+    version=os.getenv('CI_COMMIT_TAG', version),
     description='Ensembl metadata update service',
     long_description=readme,
     namespace_packages=['ensembl'],
