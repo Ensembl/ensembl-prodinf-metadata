@@ -12,8 +12,8 @@ COPY --chown=appuser:appuser . /home/appuser/metadata
 #Install dependencies
 RUN python -m venv /home/appuser/metadata/venv
 ENV PATH="/home/appuser/metadata/venv/bin:$PATH"
-RUN pip install -r requirements.txt
+RUN pip install wheel
 RUN pip install .
 
 EXPOSE 5002
-CMD  ["gunicorn", "--config", "/home/appuser/metadata/gunicorn_config.py", "-b", "0.0.0.0:5002", "ensembl.production.metadata.app.main:app"]
+CMD  ["gunicorn", "--config", "/home/appuser/metadata/gunicorn_config.py", "ensembl.production.metadata.app.main:app"]
