@@ -1,4 +1,4 @@
-ensembl-prodinf-core~=2.0.0
+ensembl-prodinf-core~=3.0.0
 Click
 Flask
 flasgger
@@ -6,4 +6,4 @@ Flask-Cors
 gunicorn
 mysqlclient
 requests
-SQLAlchemy
+#SQLAlchemy (listed in prodinf core)
